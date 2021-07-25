@@ -47,7 +47,7 @@ const Container = styled.div`
 const Background = styled.div`
     position: fixed;
     top: 0;
-    letf: 0;
+    left: 0;
     bottom: 0;
     right: 0;
     z-index: -1;
@@ -62,9 +62,10 @@ const Background = styled.div`
 
 const ImageTitle = styled.div`
     height: 30vh;
-    min-heigth: 170px;
+    min-height: 170px;
     width: 35vw;
     min-width: 200px;
+    // margin-top: 60px;
 
     img{
         height: 100%;
@@ -137,4 +138,5 @@ const Description = styled.div`
     font-size: 20px;
     padding-top: 16px;
     color: rgb(249, 249, 249);
+    max-width: 700px
 `
