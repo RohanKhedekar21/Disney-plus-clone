@@ -88,7 +88,7 @@ function Header() {
                         </NavMenu>
                         <UserImg
                             onClick={signOut}
-                            src="/images/User.png" />
+                            src={userPhoto} />
                     </>
             }
 
