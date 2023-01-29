@@ -1,44 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import db from '../firebase';
+import axios from '../axios';
+import { API_KEY, base_url } from '../requset';
+import movieTrailer from 'movie-trailer';
 
 function Detail() {
 
     const { id } = useParams();
     const [movie, setMovie] = useState()
+    
+    async function fetchData() {
+        const request = await axios.get(`/movie/${id}?api_key=${API_KEY}&language=en-US`)
+        console.log(">>>>request", request);
+        setMovie(request.data)
+    }
 
     useEffect(() => {
-        //Grab the movie info from DB=
-        db.collection("movies")
-            .doc(id)
-            .get()
-            .then((doc) => {
-                if (doc.exists) {
-                    // save the movie data
-                    setMovie(doc.data());
-                } else {
-                    // redirect to home page
-                }
-            })
+        fetchData()
     }, [])
+
+    const playTrailer = () => {
+        movieTrailer(movie?.name || movie?.title || movie?.original_name || '')
+            .then(url => {
+                window.open(url)
+            }).catch(error => console.log(error))
+        
+    }
 
     return (
         <Container>
             {movie && (
                 <>
                     <Background>
-                        <img src={movie.backgroundImg} />
+                        <img src={`${base_url}${movie.poster_path}`} />
                     </Background>
-                    <ImageTitle>
-                        <img src={movie.titleImg} />
-                    </ImageTitle>
+                    {/* <ImageTitle>
+                        <img src={`${base_url}${movie.backdrop_path}`} />
+                    </ImageTitle> */}
                     <Controls>
                         <PlayButton>
                             <img src="/images/play-icon-black.png" />
                             <span>PLAY</span>
                         </PlayButton>
-                        <TrailerButton>
+                        <TrailerButton onClick={() => playTrailer()}>
                             <img src="/images/play-icon-white.png" />
                             <span>TRAILER</span>
                         </TrailerButton>
@@ -50,10 +55,10 @@ function Detail() {
                         </GroupWatchButton>
                     </Controls>
                     <SubTitle>
-                        {movie.subTitle}
+                        {movie.title}
                     </SubTitle>
                     <Description>
-                        {movie.description}
+                        {movie.overview}
                     </Description>
                 </>
             )
@@ -82,7 +87,7 @@ const Background = styled.div`
     img{
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: revert;
     }
 `
 
@@ -103,6 +108,7 @@ const ImageTitle = styled.div`
 const Controls = styled.div`
     display: flex;
     align-items: center;
+    padding-top: 250px;
 `
 
 const PlayButton = styled.button`

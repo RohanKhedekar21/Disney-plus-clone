@@ -3,27 +3,35 @@ import styled from 'styled-components';
 import ImgSlider from './ImgSlider';
 import Movies from './Movies';
 import Viewers from './Viewers';
-import db from '../firebase';
 import { useDispatch } from 'react-redux';
 import { setMovies } from '../features/movie/movieSlice';
+import requests from '../requset';
+import axios from '../axios';
 
 function Home () {
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     db.collection("movies").onSnapshot((snapshot) => {
-    //         let tempMovies = snapshot.docs.map((doc) => {
-    //             return { id: doc.id, ...doc.data() }
-    //         })
-    //         dispatch(setMovies(tempMovies));
-    //     })
-    // },[])
+    async function fetchData() {
+        const request = await axios.get(requests.fetchTrendingMovie);
+        console.log(">>>>request",request)
+        let tempMovies = request.data.results.map(item => {
+            return { id: item.id, ...item}
+        })
+        dispatch(setMovies(tempMovies))
+    }
+
+    useEffect(() => {
+        fetchData()
+    },[])
 
     return (
         <Container>
             <ImgSlider />
             <Viewers/>
-            {/* <Movies/> */}
+            <Movies/>
+            <Footer>
+                ----------------    EDUCATIONAL PURPOSES ONLY   ----------------
+            </Footer>
         </Container>
     )
 }
@@ -46,4 +54,9 @@ const Container = styled.main`
         bottom: 0;
         z-index: -1;
     }
+`
+const Footer = styled.footer`
+    padding: 50px 0 10px 0;
+    text-align: center;
+    color: darkgrey; 
 `

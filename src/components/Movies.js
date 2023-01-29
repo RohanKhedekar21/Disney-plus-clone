@@ -3,6 +3,9 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { selectMovies } from '../features/movie/movieSlice';
+import { base_url } from '../requset';
+
+
 
 function Movies() {
     const movies = useSelector(selectMovies)
@@ -15,7 +18,12 @@ function Movies() {
                     movies.map((movie) => (
                         <Wrap key={movie.id}>
                             <Link to={`/detail/${movie.id}`}>
-                                <img src={movie.cardImg} />
+                                <img
+                                    key={movie.id}
+                                    // className={`row_poster ${isLargeRow && "row_posterLarge"}`}
+                                    src={`${base_url}${movie.backdrop_path}`}
+                                    alt={movie.name}
+                                />
                             </Link>
                         </Wrap>
                     ))
