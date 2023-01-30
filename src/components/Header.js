@@ -61,7 +61,7 @@ function Header() {
                     :
                     <>
                         <NavMenu>
-                            <a href='/homepage/'>
+                            <a href='/homepage'>
                                 <img src="/images/home-icon.svg" />
                                 <span>HOME</span>
                             </a>
